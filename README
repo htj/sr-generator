@@ -1,0 +1,10 @@
+
+A simple storage record generator.
+
+Usage: ./srgen directory daycount
+
+E.g.: ./srgen storagerecords 10
+
+Question / Suggestion / Feedback / Patches can be send to htj _at_ ndgf.org
+
+
