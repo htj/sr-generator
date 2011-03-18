@@ -7,6 +7,8 @@ Author: Henrik Thostrup Jensen <htj@ndgf.org>
 Copyright: NorduNET / Nordic Data Grid Facility (2011)
 """
 
+import time
+
 from xml.etree import cElementTree as ET
 
 import srelements
@@ -14,16 +16,18 @@ import srelements
 
 
 ISO_TIME_FORMAT   = "%Y-%m-%dT%H:%M:%S"
+XML_HEADER        = '''<?xml version="1.0" encoding="UTF-8" ?>''' + "\n"
 
 
 
-class StorageRecordGenerator:
+class StorageRecordTree:
 
     def __init__(self):
         self.record_id = None
         self.storage_system = None
         self.group = None
         self.measure_time = None
+        self.valid_duration = None
         self.resource_consumption = None
 
 
@@ -37,7 +41,8 @@ class StorageRecordGenerator:
 
         assert self.record_id               is not None, 'No record id specified'
         assert self.storage_system          is not None, 'No storage system specified'
-        assert self.measure_time            is not None, 'No meausre time specified'
+        assert self.measure_time            is not None, 'No meausure time specified'
+        assert self.valid_duration          is not None, 'No valid duraction specified'
         assert self.resource_consumption    is not None, 'No resource consumption specified'
 
         sr = ET.Element(srelements.STORAGE_USAGE_RECORD)
@@ -53,9 +58,9 @@ class StorageRecordGenerator:
             setElement(id_block, srelements.GROUP, self.group)
 
         setElement(sr, srelements.MEASURE_TIME, self.measure_time)
-        setElement(sr, srelements.RESOURCE_CONSUMPTION, self.resource_consumption)
+        setElement(sr, srelements.RESOURCE_CAPACITY_USED, self.resource_consumption)
 
-        return ET.ElementTree(ur)
+        return ET.ElementTree(sr)
 
 
     def writeXML(self, filename):

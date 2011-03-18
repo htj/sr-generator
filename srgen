@@ -1,0 +1,72 @@
+#!/usr/bin/env python
+
+"""
+Script for generating storage records
+
+Author: Henrik Thostrup Jensen <htj@ndgf.org>
+Copyright: NorduNET / Nordic Data Grid Facility (2011)
+"""
+
+import sys
+import os
+import uuid
+import random
+import datetime
+import itertools
+
+from xml.etree import cElementTree as ET
+
+import srelements, srtree
+
+
+
+ISO_TIME_FORMAT   = "%Y-%m-%dT%H:%M:%S"
+
+
+
+def main():
+
+    STORAGE_SYSTEMS = [ 'dcache.example.org', 'gridftp.example.org' ]
+    GROUPS = [ 'Atlas', 'Alice', 'Bio' ]
+
+    assert len(sys.argv) == 3, 'Usage: %s directory day_count' % sys.argv[0]
+
+    path = sys.argv[1]
+    days = int(sys.argv[2])
+
+    if not os.path.exists(path):
+        print 'Creating directory %s' % path
+        os.mkdir(path)
+
+    today = datetime.date.today()
+
+    record_count = 0
+
+    for day_delta in range(days, 0, -1):
+
+        gen_date = today - datetime.timedelta(day_delta)
+        measure_time = str(gen_date) + 'T00:00:00Z'
+
+        for storage_system, group in itertools.product(STORAGE_SYSTEMS, GROUPS):
+
+            srt = srtree.StorageRecordTree()
+
+            srt.record_id = str(uuid.uuid1()) # just something
+            srt.storage_system = storage_system
+            srt.group = group
+            srt.measure_time = measure_time
+            srt.valid_duration = 'P1DT30M0S' # 1 day, 30 minutes
+            srt.resource_consumption = int((random.random() * 200) + 50)
+
+            fpath = os.path.join(path, 'sr_%s_%s_%s' % (storage_system, group, srt.record_id))
+
+            srt.writeXML(fpath)
+            record_count += 1
+
+    print "Wrote %i records" % record_count
+
+
+
+if __name__ == '__main__':
+    main()
+
