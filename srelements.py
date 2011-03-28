@@ -16,7 +16,7 @@ SR_NAMESPACE = "http://eu-emi.eu/namespaces/2011/02/storagerecord"
 STORAGE_USAGE_RECORD    = QName("{%s}StorageUsageRecord"    % SR_NAMESPACE)
 STORAGE_USAGE_RECORDS   = QName("{%s}StorageUsageRecords"   % SR_NAMESPACE)
 RECORD_IDENTITY         = QName("{%s}RecordIdentity"        % SR_NAMESPACE)
-RECORD_ID               = QName("{%s}recordID"              % SR_NAMESPACE)
+RECORD_ID               = QName("{%s}recordId"              % SR_NAMESPACE)
 CREATE_TIME             = QName("{%s}createTime"            % SR_NAMESPACE)
 
 # storage system
