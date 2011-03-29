@@ -58,6 +58,7 @@ class StorageRecordTree:
             setElement(id_block, srelements.GROUP, self.group)
 
         setElement(sr, srelements.MEASURE_TIME, self.measure_time)
+        setElement(sr, srelements.VALID_DURATION, self.valid_duration)
         setElement(sr, srelements.RESOURCE_CAPACITY_USED, self.resource_consumption)
 
         return ET.ElementTree(sr)
