@@ -26,6 +26,8 @@ ISO_TIME_FORMAT   = "%Y-%m-%dT%H:%M:%S"
 
 def main():
 
+    usage = {}
+
     STORAGE_SYSTEMS = [ 'dcache.example.org', 'gridftp.example.org' ]
     GROUPS = [ 'Atlas', 'Alice', 'Bio' ]
 
@@ -49,6 +51,8 @@ def main():
 
         for storage_system, group in itertools.product(STORAGE_SYSTEMS, GROUPS):
 
+            usage_key = storage_system + ':' + group
+
             srt = srtree.StorageRecordTree()
 
             srt.record_id = str(uuid.uuid1()) # just something
@@ -56,7 +60,12 @@ def main():
             srt.group = group
             srt.measure_time = measure_time
             srt.valid_duration = 'P1DT30M0S' # 1 day, 30 minutes
-            srt.resource_consumption = int((random.random() * 200) + 50)
+
+            last_usage = usage.get(usage_key, random.randrange(50,200))
+            new_usage = last_usage + random.randrange(-10, 25)
+            usage[usage_key] = new_usage
+
+            srt.resource_consumption = new_usage
 
             fpath = os.path.join(path, 'sr_%s_%s_%s' % (storage_system, group, srt.record_id))
 
